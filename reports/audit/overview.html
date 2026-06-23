@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLaMA-Factory 项目摸底报告</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; color: #18202a; background: #f6f7f9; }
+    main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 56px; }
+    section { margin-top: 24px; }
+    h1, h2 { color: #111827; line-height: 1.2; }
+    h1 { font-size: 34px; margin: 4px 0 8px; }
+    h2 { font-size: 20px; margin: 0 0 12px; }
+    p, li { line-height: 1.65; }
+    .hero { background: #ffffff; border: 1px solid #d8dee8; border-radius: 8px; padding: 22px; }
+    .eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0; color: #2563eb; text-transform: uppercase; }
+    .muted, .empty { color: #5b6778; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .metrics div { background: #ffffff; border: 1px solid #d8dee8; border-radius: 8px; padding: 16px; }
+    .metrics strong { display: block; font-size: 24px; color: #111827; }
+    .metrics span { color: #5b6778; font-size: 13px; }
+    .grid { display: grid; gap: 16px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid > div, section:not(.hero):not(.metrics):not(.grid) { background: #ffffff; border: 1px solid #d8dee8; border-radius: 8px; padding: 18px; }
+    table { width: 100%; border-collapse: collapse; background: #ffffff; }
+    th, td { text-align: left; vertical-align: top; border-bottom: 1px solid #e5e9f0; padding: 9px 10px; font-size: 14px; white-space: pre-wrap; word-break: break-word; }
+    th { color: #334155; background: #eef2f7; }
+    pre { white-space: pre-wrap; word-break: break-word; background: #f8fafc; border: 1px solid #d8dee8; border-radius: 8px; padding: 12px; overflow-x: auto; }
+    code { color: #0f172a; }
+    li { margin: 4px 0; }
+    ul { padding-left: 20px; }
+    @media (max-width: 760px) { .metrics, .two, .three { grid-template-columns: 1fr; } main { padding: 18px 12px 36px; } }
+  </style>
+</head>
+<body>
+  <main>
+    
+    <section class="hero">
+      <p class="eyebrow">鼠鼠实习妙妙工具项目摸底报告</p>
+      <h1>LLaMA-Factory</h1>
+      <p class="muted">D:\shushu-projects\LLaMA-Factory</p>
+    </section>
+
+    <section class="metrics">
+      <div><strong>553</strong><span>Files scanned</span></div>
+      <div><strong>13472122</strong><span>Approx bytes</span></div>
+      <div><strong>10</strong><span>Dependency clues</span></div>
+      <div><strong>55</strong><span>Test clues</span></div>
+    </section>
+
+    <section>
+      <h2>语言和文件类型</h2>
+      <div class="grid two">
+        <div><table><thead><tr><th>Language</th><th>Files</th></tr></thead><tbody><tr><td>Python</td><td>291</td></tr><tr><td>Other</td><td>156</td></tr><tr><td>YAML</td><td>100</td></tr><tr><td>Shell</td><td>4</td></tr><tr><td>TOML</td><td>1</td></tr><tr><td>JavaScript</td><td>1</td></tr></tbody></table></div>
+        <div><table><thead><tr><th>Extension</th><th>Files</th></tr></thead><tbody><tr><td>.py</td><td>291</td></tr><tr><td>.yaml</td><td>87</td></tr><tr><td>.md</td><td>69</td></tr><tr><td>.txt</td><td>26</td></tr><tr><td>.json</td><td>20</td></tr><tr><td>.yml</td><td>13</td></tr><tr><td>[no extension]</td><td>9</td></tr><tr><td>.svg</td><td>6</td></tr><tr><td>.jpg</td><td>4</td></tr><tr><td>.jsonl</td><td>4</td></tr><tr><td>.sh</td><td>4</td></tr><tr><td>.mp4</td><td>3</td></tr><tr><td>.mp3</td><td>2</td></tr><tr><td>.rst</td><td>2</td></tr><tr><td>.local</td><td>1</td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>核心链路线索</h2>
+      <table><thead><tr><th>Category</th><th>Hit Count</th><th>Representative Paths</th></tr></thead><tbody><tr><td>api_backend</td><td>9</td><td>assets/sponsors/serpapi.svg
+scripts/api_example/test_image.py
+scripts/api_example/test_toolcall.py
+src/api.py
+src/llamafactory/api/__init__.py
+src/llamafactory/api/app.py
+src/llamafactory/api/chat.py
+src/llamafactory/api/common.py
+src/llamafactory/api/protocol.py</td></tr><tr><td>async_jobs</td><td>1</td><td>src/llamafactory/v1/plugins/trainer_plugins/lr_scheduler.py</td></tr><tr><td>config</td><td>40</td><td>.github/ISSUE_TEMPLATE/config.yml
+.pre-commit-config.yaml
+data/v1_dpo_demo.yaml
+data/v1_sft_demo.yaml
+examples/accelerate/fsdp2_config.yaml
+examples/accelerate/fsdp2_config_qwen35.yaml
+examples/accelerate/fsdp2_config_qwen35_moe.yaml
+examples/accelerate/fsdp_config.yaml
+examples/accelerate/fsdp_config_multiple_nodes.yaml
+examples/accelerate/fsdp_config_offload.yaml</td></tr><tr><td>data_pipeline</td><td>7</td><td>data/dataset_info.json
+examples/train_lora/qwen3_preprocess.yaml
+src/llamafactory/data/loader.py
+src/llamafactory/model/loader.py
+src/llamafactory/v1/plugins/data_plugins/loader.py
+tests/data/test_loader.py
+tests_v1/core/test_model_loader.py</td></tr><tr><td>database_state</td><td>40</td><td>data/identity.json
+docs/en/dev-guide/core/model-engine.md
+docs/en/dev-guide/plugins/model-plugins/initialization.md
+docs/en/dev-guide/plugins/model-plugins/kernels.md
+docs/en/dev-guide/plugins/model-plugins/rendering.md
+docs/en/hyperparameters/model-argument.md
+docs/zh/dev-guide/core/model-engine.md
+docs/zh/dev-guide/plugins/model-plugins/initialization.md
+docs/zh/dev-guide/plugins/model-plugins/kernels.md
+docs/zh/dev-guide/plugins/model-plugins/rendering.md</td></tr><tr><td>devops_deploy</td><td>28</td><td>.dockerignore
+.github/workflows/docker.yml
+.github/workflows/docs.yml
+.github/workflows/label_issue.yml
+.github/workflows/publish.yml
+.github/workflows/tests.yml
+.github/workflows/tests_cuda.yml
+.github/workflows/tests_npu.yml
+CITATION.cff
+docker/docker-cuda/Dockerfile</td></tr><tr><td>evaluation</td><td>40</td><td>.github/workflows/tests.yml
+.github/workflows/tests_cuda.yml
+.github/workflows/tests_npu.yml
+examples/extras/nlg_eval/llama3_lora_predict.yaml
+requirements/metrics.txt
+scripts/api_example/test_image.py
+scripts/api_example/test_toolcall.py
+scripts/eval_bleu_rouge.py
+src/llamafactory/eval/__init__.py
+src/llamafactory/eval/evaluator.py</td></tr><tr><td>frontend_mobile</td><td>9</td><td>src/llamafactory/webui/components/__init__.py
+src/llamafactory/webui/components/chatbot.py
+src/llamafactory/webui/components/data.py
+src/llamafactory/webui/components/eval.py
+src/llamafactory/webui/components/export.py
+src/llamafactory/webui/components/footer.py
+src/llamafactory/webui/components/infer.py
+src/llamafactory/webui/components/top.py
+src/llamafactory/webui/components/train.py</td></tr><tr><td>inference_demo</td><td>40</td><td>assets/sponsors/serpapi.svg
+data/alpaca_en_demo.json
+data/alpaca_zh_demo.json
+data/c4_demo.jsonl
+data/dpo_en_demo.json
+data/dpo_zh_demo.json
+data/glaive_toolcall_en_demo.json
+data/glaive_toolcall_zh_demo.json
+data/kto_en_demo.json
+data/mllm_audio_demo.json</td></tr><tr><td>model</td><td>40</td><td>docs/en/dev-guide/core/model-engine.md
+docs/en/dev-guide/plugins/model-plugins/initialization.md
+docs/en/dev-guide/plugins/model-plugins/kernels.md
+docs/en/dev-guide/plugins/model-plugins/rendering.md
+docs/en/hyperparameters/model-argument.md
+docs/zh/dev-guide/core/model-engine.md
+docs/zh/dev-guide/plugins/model-plugins/initialization.md
+docs/zh/dev-guide/plugins/model-plugins/kernels.md
+docs/zh/dev-guide/plugins/model-plugins/rendering.md
+docs/zh/hyperparameters/model-argument.md</td></tr><tr><td>testing_quality</td><td>40</td><td>.github/workflows/tests.yml
+.github/workflows/tests_cuda.yml
+.github/workflows/tests_npu.yml
+scripts/api_example/test_image.py
+scripts/api_example/test_toolcall.py
+src/llamafactory/train/test_utils.py
+src/llamafactory/v1/utils/pytest.py
+tests/check_license.py
+tests/conftest.py
+tests/data/processor/test_feedback.py</td></tr><tr><td>training</td><td>40</td><td>docs/en/dev-guide/core/trainer.md
+docs/en/hyperparameters/training-argument.md
+docs/en/training/dpo.md
+docs/en/training/sft.md
+docs/zh/dev-guide/core/trainer.md
+docs/zh/hyperparameters/training-argument.md
+docs/zh/training/dpo.md
+docs/zh/training/sft.md
+examples/extras/fsdp_qlora/train.sh
+examples/ktransformers/train_lora/deepseek_v2_lora_sft_kt.yaml</td></tr></tbody></table>
+    </section>
+
+    <section class="grid two">
+      <div>
+        <h2>依赖和环境</h2>
+        <ul><li><code>Makefile</code></li><li><code>docker/docker-cuda/Dockerfile</code></li><li><code>docker/docker-cuda/docker-compose.yml</code></li><li><code>docker/docker-npu/Dockerfile</code></li><li><code>docker/docker-npu/docker-compose.yml</code></li><li><code>docker/docker-rocm/Dockerfile</code></li><li><code>docker/docker-rocm/docker-compose.yml</code></li><li><code>docs/Makefile</code></li><li><code>docs/requirements.txt</code></li><li><code>pyproject.toml</code></li></ul>
+      </div>
+      <div>
+        <h2>README</h2>
+        <ul><li><code>README.md</code></li><li><code>README_zh.md</code></li><li><code>data/README.md</code></li><li><code>data/README_zh.md</code></li><li><code>docker/docker-cuda/README.md</code></li><li><code>examples/README.md</code></li><li><code>examples/README_zh.md</code></li></ul>
+      </div>
+    </section>
+
+    <section class="grid three">
+      <div>
+        <h2>Notebooks</h2>
+        <p class="empty">无</p>
+      </div>
+      <div>
+        <h2>Docker</h2>
+        <ul><li><code>.dockerignore</code></li><li><code>.github/workflows/docker.yml</code></li><li><code>docker/docker-cuda/Dockerfile</code></li><li><code>docker/docker-cuda/Dockerfile.base</code></li><li><code>docker/docker-cuda/Dockerfile.megatron</code></li><li><code>docker/docker-cuda/README.md</code></li><li><code>docker/docker-cuda/docker-compose.yml</code></li><li><code>docker/docker-npu/Dockerfile</code></li><li><code>docker/docker-npu/docker-compose.yml</code></li><li><code>docker/docker-rocm/Dockerfile</code></li><li><code>docker/docker-rocm/docker-compose.yml</code></li></ul>
+      </div>
+      <div>
+        <h2>Tests</h2>
+        <ul><li><code>.github/workflows/tests.yml</code></li><li><code>.github/workflows/tests_cuda.yml</code></li><li><code>.github/workflows/tests_npu.yml</code></li><li><code>scripts/api_example/test_image.py</code></li><li><code>scripts/api_example/test_toolcall.py</code></li><li><code>src/llamafactory/train/test_utils.py</code></li><li><code>src/llamafactory/v1/utils/pytest.py</code></li><li><code>tests/check_license.py</code></li><li><code>tests/conftest.py</code></li><li><code>tests/data/processor/test_feedback.py</code></li><li><code>tests/data/processor/test_pairwise.py</code></li><li><code>tests/data/processor/test_processor_utils.py</code></li><li><code>tests/data/processor/test_supervised.py</code></li><li><code>tests/data/processor/test_unsupervised.py</code></li><li><code>tests/data/test_collator.py</code></li><li><code>tests/data/test_converter.py</code></li><li><code>tests/data/test_formatter.py</code></li><li><code>tests/data/test_loader.py</code></li><li><code>tests/data/test_mm_plugin.py</code></li><li><code>tests/data/test_template.py</code></li><li><code>tests/e2e/test_chat.py</code></li><li><code>tests/e2e/test_sglang.py</code></li><li><code>tests/e2e/test_train.py</code></li><li><code>tests/eval/test_eval_template.py</code></li><li><code>tests/model/model_utils/test_add_tokens.py</code></li></ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>潜在数据 / 状态 / 模型 / 资源路径</h2>
+      <ul><li><code>assets/logo.png</code></li><li><code>assets/sponsors/serpapi.svg</code></li><li><code>assets/sponsors/warp.jpg</code></li><li><code>assets/thirdparty/colab.svg</code></li><li><code>assets/thirdparty/discord.svg</code></li><li><code>assets/thirdparty/dsw.svg</code></li><li><code>assets/thirdparty/lab4ai.svg</code></li><li><code>assets/thirdparty/online.svg</code></li><li><code>data/README.md</code></li><li><code>data/README_zh.md</code></li><li><code>data/alpaca_en_demo.json</code></li><li><code>data/alpaca_zh_demo.json</code></li><li><code>data/c4_demo.jsonl</code></li><li><code>data/dataset_info.json</code></li><li><code>data/dpo_en_demo.json</code></li><li><code>data/dpo_zh_demo.json</code></li><li><code>data/glaive_toolcall_en_demo.json</code></li><li><code>data/glaive_toolcall_zh_demo.json</code></li><li><code>data/identity.json</code></li><li><code>data/kto_en_demo.json</code></li><li><code>data/mllm_audio_demo.json</code></li><li><code>data/mllm_demo.json</code></li><li><code>data/mllm_demo_data/1.jpg</code></li><li><code>data/mllm_demo_data/1.mp3</code></li><li><code>data/mllm_demo_data/1.mp4</code></li><li><code>data/mllm_demo_data/2.avi</code></li><li><code>data/mllm_demo_data/2.jpg</code></li><li><code>data/mllm_demo_data/2.wav</code></li><li><code>data/mllm_demo_data/3.flac</code></li><li><code>data/mllm_demo_data/3.jpg</code></li></ul>
+    </section>
+
+    <section>
+      <h2>目录树摘要</h2>
+      <pre>LLaMA-Factory/
+  .ai/
+  .claude/
+  .github/
+  assets/
+  data/
+  docker/
+  docs/
+  examples/
+  requirements/
+  scripts/
+  src/
+  tests/
+  tests_v1/
+  .dockerignore
+  .env.local
+  .gitattributes
+  .gitignore
+  .pre-commit-config.yaml
+  CITATION.cff
+  CLAUDE.md
+  LICENSE
+  MANIFEST.in
+  Makefile
+  README.md
+  README_zh.md
+  pyproject.toml
+    CLAUDE.md
+    skills/
+      llamafactory-sft/
+    ISSUE_TEMPLATE/
+    workflows/
+    CODE_OF_CONDUCT.md
+    CONTRIBUTING.md
+    PULL_REQUEST_TEMPLATE.md
+    SECURITY.md
+    copilot-instructions.md
+    instructions-v0.md
+    instructions-v1.md
+      1-bug-report.yml
+      2-feature-request.yml
+      config.yml
+      docker.yml
+      docs.yml
+      label_issue.yml
+      publish.yml
+      tests.yml
+      tests_cuda.yml
+      tests_npu.yml
+    sponsors/
+    thirdparty/
+    logo.png
+      serpapi.svg
+      warp.jpg
+      colab.svg
+      discord.svg
+      dsw.svg
+      lab4ai.svg
+      online.svg
+    mllm_demo_data/
+    README.md
+    README_zh.md
+    alpaca_en_demo.json
+    alpaca_zh_demo.json
+    c4_demo.jsonl
+    dataset_info.json
+    dpo_en_demo.json
+    dpo_zh_demo.json
+    glaive_toolcall_en_demo.json
+    glaive_toolcall_zh_demo.json
+    identity.json
+    kto_en_demo.json
+    mllm_audio_demo.json
+    mllm_demo.json
+    mllm_video_audio_demo.json
+    mllm_video_demo.json
+    reason_tool_use_demo_50.jsonl
+    v1_dpo_demo.jsonl
+    v1_dpo_demo.yaml
+    v1_sft_demo.jsonl
+    v1_sft_demo.yaml
+    wiki_demo.txt
+      1.jpg
+      1.mp3
+      1.mp4
+      2.avi
+      2.jpg
+      2.wav
+      3.flac
+      3.jpg
+      3.mp4
+      4.mp3
+      4.mp4
+    docker-cuda/
+    docker-npu/
+    docker-rocm/
+      Dockerfile
+      Dockerfile.base
+      Dockerfile.megatron
+      README.md
+      docker-compose.yml
+      Dockerfile
+      docker-compose.yml
+      Dockerfile
+      docker-compose.yml
+    _static/
+    en/
+    zh/
+    Makefile
+    conf.py
+    make.bat
+    requirements.txt
+      css/
+      js/
+      advanced/
+      data-preparation/
+      dev-guide/
+      hyperparameters/
+      inference/
+      training/
+      conf.py
+      getting-started.md
+      index.rst
+      installation.md
+      llamaboard-web-ui.md
+      advanced/
+      data-preparation/
+      dev-guide/
+      hyperparameters/
+      inference/
+      training/
+      conf.py
+      getting-started.md
+      index.rst
+      installation.md
+      llamaboard-web-ui.md
+    accelerate/
+    ascend/
+    deepspeed/
+    extras/
+    inference/
+    ktransformers/
+    megatron/
+    merge_lora/
+    train_full/
+    train_lora/
+    train_qlora/
+    v1/
+    README.md
+    README_zh.md
+      fsdp2_config.yaml
+      fsdp2_config_qwen35.yaml
+      fsdp2_config_qwen35_moe.yaml
+      fsdp_config.yaml
+      fsdp_config_multiple_nodes.yaml
+      fsdp_config_offload.yaml
+      qwen3_5_full_sft_fsdp2.yaml
+      qwen3_5moe_lora_sft_fsdp2.yaml
+      qwen3_full_sft_fsdp2.yaml
+      qwen3moe_full_sft_fsdp.yaml
+      qwen3vlmoe_full_sft_fsdp2.yaml
+      qwen3vlmoe_lora_sft_fsdp.yaml
+      ds_z0_config.json
+      ds_z2_autotp_config.json
+      ds_z2_config.json
+      ds_z2_offload_config.json
+      ds_z3_config.json
+      ds_z3_fp8_config.json
+      ds_z3_offload_config.json
+      adam_mini/
+      apollo/
+      asft/
+      badam/
+      dft/
+      eaft/
+      fp8/
+      fsdp_qlora/
+      galore/
+      llama_pro/
+      loraplus/
+      mod/
+      multi_tokens/
+      muon/
+      nlg_eval/
+      oft/
+      pissa/
+      qoft/
+      qwen3.yaml
+      qwen3_full_sft.yaml
+      qwen3_lora_sft.yaml
+      qwen3vl.yaml
+      accelerate/
+      train_lora/
+      qwen2_vl_full.yaml
+      qwen3_moe_full.yaml
+      qwen3_full_sft.yaml
+      qwen3_gptq.yaml
+      qwen3_lora_sft.yaml
+      qwen3vl_lora_sft.yaml
+      qwen3_full_sft.yaml
+      qwen3vl_full_sft.yaml
+      qwen3_lora_dpo.yaml
+      qwen3_lora_kto.yaml
+      qwen3_lora_pretrain.yaml
+      qwen3_lora_reward.yaml
+      qwen3_lora_sft.sh
+      qwen3_lora_sft.yaml
+      qwen3_lora_sft_ds3.yaml
+      qwen3_lora_sft_ray.yaml
+      qwen3_preprocess.yaml
+      qwen3vl_lora_dpo.yaml
+      qwen3vl_lora_sft.yaml
+      llama3_lora_sft_aqlm.yaml
+      llama3_lora_sft_awq.yaml
+      llama3_lora_sft_gptq.yaml
+      qwen3_lora_sft_bnb_npu.yaml
+      qwen3_lora_sft_otfq.yaml
+      train_batching_strategy/
+      train_freeze/
+      train_full/
+      train_lora/
+      train_qlora/
+    adam-mini.txt
+    apollo.txt
+    aqlm.txt
+    badam.txt
+    bitsandbytes.txt
+    deepspeed.txt
+    dev.txt
+    eetq.txt
+    fp8-te.txt
+    fp8.txt
+    galore.txt
+    gptq.txt
+    hqq.txt
+    ktransformers.txt
+    liger-kernel.txt
+    metrics.txt
+    minicpm-v.txt
+    npu.txt
+    openmind.txt
+    sglang.txt
+    swanlab.txt
+    triton_ascend.txt
+    vllm.txt
+    api_example/
+    convert_ckpt/
+    stat_utils/
+    bench_qwen.py
+    dcp2hf.py</pre>
+    </section>
+
+    <section>
+      <h2>下一步人工确认</h2>
+      <ul>
+        <li>找到最小可运行命令：API、页面、CLI、worker、测试、训练或 demo 至少一个。</li>
+        <li>确认依赖、环境变量、数据库/数据文件、端口和外部服务。</li>
+        <li>确认 baseline/demo 是否能在本地、Docker、云服务器或 GPU 环境上跑通。</li>
+        <li>确认自己的面试亮点：改造点、demo、测试、报告或实验计划。</li>
+      </ul>
+    </section>
+    
+  </main>
+</body>
+</html>

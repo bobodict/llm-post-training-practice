@@ -1,0 +1,214 @@
+{
+  "candidates": [
+    {
+      "name": "LLaMA-Factory",
+      "repo_url": "https://github.com/hiyouga/LLaMA-Factory",
+      "license": "Apache 2.0",
+      "stars": 45000,
+      "last_commit": "2026-06-15",
+      "runnable": "Web UI 一键启动，支持 QLoRA 在单张 24GB 消费级显卡上微调 7B 模型；有完整中文文档和 Docker 支持",
+      "resources": "本地单卡 RTX 3060/4060 (12GB) 可跑 QLoRA 微调 1.5B-3B 模型；CPU 可做推理演示",
+      "matched_jd_terms": [
+        "SFT",
+        "LoRA微调",
+        "LLaMA-Factory框架",
+        "大模型训练",
+        "监督微调",
+        "DPO",
+        "模型部署API",
+        "数据流水线",
+        "实验管理",
+        "混合精度训练",
+        "断点续训"
+      ],
+      "jd_match_score": 28,
+      "license_score": 4,
+      "runnable_score": 20,
+      "resource_fit_score": 9,
+      "mod_ideas": [
+        "用 B站弹幕/评论数据构建自定义 SFT 数据集，微调 Index-1.9B 模型",
+        "加 DPO 偏好对齐训练，对比 SFT vs DPO 效果差异",
+        "补充完整评测流程：用 MMLU/C-Eval 等 benchmark 评测微调前后效果",
+        "加 vLLM 推理部署 + 吞吐/延迟压测，对比原模型与微调后模型推理性能",
+        "写 WandB/SwanLab 训练可视化 + 实验对比报告"
+      ],
+      "risk_notes": [
+        "不直接覆盖 GRPO/DAPO 等 RL 算法，需配合 EasyR1 学习",
+        "消费级显卡只能跑小模型 LoRA，与生产环境有差距",
+        "B站弹幕数据需要自行爬取和清洗"
+      ],
+      "score": 88.46,
+      "raw_score": 92,
+      "max_raw_score": 104,
+      "score_breakdown": {
+        "jd_match": 28,
+        "license": 4,
+        "runnable": 20,
+        "resource_fit": 9,
+        "activity": 10,
+        "stars": 10,
+        "modification_space": 20,
+        "user_preference": 0,
+        "risk_penalty": -9
+      },
+      "matched_keywords": [
+        "SFT",
+        "LoRA微调",
+        "LLaMA-Factory框架",
+        "大模型训练",
+        "监督微调",
+        "DPO",
+        "模型部署API",
+        "数据流水线",
+        "实验管理",
+        "混合精度训练",
+        "断点续训"
+      ],
+      "score_reasons": [
+        "JD match score from jd_match_score",
+        "license score from license_score",
+        "runnable score from runnable_score",
+        "resource fit score from resource_fit_score",
+        "active within 180 days",
+        "strong community signal",
+        "5 modification ideas",
+        "3 risk notes"
+      ]
+    },
+    {
+      "name": "self-llm (开源大模型食用指南)",
+      "repo_url": "https://github.com/datawhalechina/self-llm",
+      "license": "Apache 2.0",
+      "stars": 12000,
+      "last_commit": "2026-06-20",
+      "runnable": "所有教程基于 Linux 平台，面向初学者，有详细步骤和截图；已本地 clone",
+      "resources": "CPU 可做推理，单卡 GPU 可做微调；有 AutoDL 云 GPU 教程适配",
+      "matched_jd_terms": [
+        "B站Index-1.9B模型",
+        "FastAPI部署",
+        "LoRA微调",
+        "LangChain接入",
+        "Ascend NPU部署",
+        "vLLM推理",
+        "模型服务化"
+      ],
+      "jd_match_score": 22,
+      "license_score": 4,
+      "runnable_score": 18,
+      "resource_fit_score": 8,
+      "mod_ideas": [
+        "补写 B站 Index-1.9B 的 SFT 微调教程（目前只有 LoRA）",
+        "补写 B站 Index-1.9B 的 vLLM 推理部署教程（目前只有 FastAPI）",
+        "加 DPO/RLHF 章节到 Ascend NPU 支持模型列表",
+        "为 Index-1.9B 写一套完整评测（benchmark + badcase 分析）"
+      ],
+      "risk_notes": [
+        "本质是教程集合而非可魔改的代码项目，改造以补写教程为主",
+        "JD 要求的 GRPO/DAPO/蒸馏等 RL 算法不在此项目范围",
+        "作为教程仓库，简历上需要包装为'为开源项目贡献教程+自研实验'"
+      ],
+      "score": 79.81,
+      "raw_score": 83,
+      "max_raw_score": 104,
+      "score_breakdown": {
+        "jd_match": 22,
+        "license": 4,
+        "runnable": 18,
+        "resource_fit": 8,
+        "activity": 10,
+        "stars": 10,
+        "modification_space": 20,
+        "user_preference": 0,
+        "risk_penalty": -9
+      },
+      "matched_keywords": [
+        "B站Index-1.9B模型",
+        "FastAPI部署",
+        "LoRA微调",
+        "LangChain接入",
+        "Ascend NPU部署",
+        "vLLM推理",
+        "模型服务化"
+      ],
+      "score_reasons": [
+        "JD match score from jd_match_score",
+        "license score from license_score",
+        "runnable score from runnable_score",
+        "resource fit score from resource_fit_score",
+        "active within 180 days",
+        "strong community signal",
+        "4 modification ideas",
+        "3 risk notes"
+      ]
+    },
+    {
+      "name": "EasyR1",
+      "repo_url": "https://github.com/hiyouga/EasyR1",
+      "license": "Apache 2.0",
+      "stars": 5000,
+      "last_commit": "2026-06-10",
+      "runnable": "提供 Docker 镜像和 shell 脚本一键启动训练；但实际训练需要多卡 GPU",
+      "resources": "GRPO LoRA 7B 需 2×32GB；GRPO 全量 7B 需 8×40GB；本地消费级显卡几乎无法运行完整训练",
+      "matched_jd_terms": [
+        "GRPO",
+        "DAPO",
+        "强化学习训练",
+        "RL后训练",
+        "EasyR1框架",
+        "奖励函数设计",
+        "KL约束",
+        "vLLM推理",
+        "组内相对奖励"
+      ],
+      "jd_match_score": 26,
+      "license_score": 4,
+      "runnable_score": 10,
+      "resource_fit_score": 2,
+      "mod_ideas": [
+        "阅读 GRPO 核心代码（rollout→reward→advantage→loss），写代码讲解笔记",
+        "改写 reward_function 适配中文数学题，跑通最小 smoke test（1.5B 模型 + LoRA）",
+        "对比 GRPO vs DAPO 在 reward 曲线和收敛速度上的差异（读论文+运行日志分析）"
+      ],
+      "risk_notes": [
+        "GPU 要求高：GRPO LoRA 7B 需 2×32GB，本地几乎无法跑完整训练",
+        "代码复杂：基于 veRL 的分布式架构，调试门槛高",
+        "初学者可能只能做代码阅读+概念理解，无法跑完整实验"
+      ],
+      "score": 65.38,
+      "raw_score": 68,
+      "max_raw_score": 104,
+      "score_breakdown": {
+        "jd_match": 26,
+        "license": 4,
+        "runnable": 10,
+        "resource_fit": 2,
+        "activity": 10,
+        "stars": 10,
+        "modification_space": 15,
+        "user_preference": 0,
+        "risk_penalty": -9
+      },
+      "matched_keywords": [
+        "GRPO",
+        "DAPO",
+        "强化学习训练",
+        "RL后训练",
+        "EasyR1框架",
+        "奖励函数设计",
+        "KL约束",
+        "vLLM推理",
+        "组内相对奖励"
+      ],
+      "score_reasons": [
+        "JD match score from jd_match_score",
+        "license score from license_score",
+        "runnable score from runnable_score",
+        "resource fit score from resource_fit_score",
+        "active within 180 days",
+        "strong community signal",
+        "3 modification ideas",
+        "3 risk notes"
+      ]
+    }
+  ]
+}

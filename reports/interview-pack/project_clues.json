@@ -1,0 +1,108 @@
+{
+  "notes_root": "reports",
+  "source_files": [
+    "audit/audit.json",
+    "audit/overview.md",
+    "candidates.json",
+    "grpo_code_notes.md",
+    "jd.txt",
+    "ranking/candidate_score.json",
+    "ranking/candidate_score.md"
+  ],
+  "metric_hits": [
+    {
+      "source": "candidates.json",
+      "text": "GPU 要求高：GRPO LoRA 7"
+    },
+    {
+      "source": "grpo_code_notes.md",
+      "text": "Loss（策略更新）：对 advantage > 0"
+    },
+    {
+      "source": "ranking/candidate_score.json",
+      "text": "GPU 要求高：GRPO LoRA 7"
+    },
+    {
+      "source": "ranking/candidate_score.md",
+      "text": "CPU 可做推理，单卡 GPU 可做微调；有 AutoDL 云 GPU 教程适配 | B站Index-1.9"
+    },
+    {
+      "source": "ranking/candidate_score.md",
+      "text": "GPU | GRPO LoRA 7"
+    },
+    {
+      "source": "ranking/candidate_score.md",
+      "text": "GPU 要求高：GRPO LoRA 7"
+    }
+  ],
+  "claim_lines": [
+    {
+      "source": "audit/audit.json",
+      "text": "\"src/api.py\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"src/llamafactory/api/__init__.py\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"src/llamafactory/api/app.py\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"src/llamafactory/api/chat.py\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"src/llamafactory/api/common.py\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"src/llamafactory/api/protocol.py\""
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"docs/en/inference/deploy.md\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"docs/zh/inference/deploy.md\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"docs/en/inference/deploy.md\","
+    },
+    {
+      "source": "audit/audit.json",
+      "text": "\"docs/zh/inference/deploy.md\","
+    },
+    {
+      "source": "audit/overview.md",
+      "text": "| api_backend | 9 | assets/sponsors/serpapi.svg<br>scripts/api_example/test_image.py<br>scripts/api_example/test_toolcall.py<br>src/api.py<br>src/llamafactory/api/__init__.py<br>src/llamafactory/api/app.py<br>src/llamafactory/api/chat.py<br>src/llamafactory/ap"
+    },
+    {
+      "source": "audit/overview.md",
+      "text": "## Notebook / Docker / Test 线索"
+    },
+    {
+      "source": "audit/overview.md",
+      "text": "- 找到最小可运行命令：API、页面、CLI、worker、测试、训练或 demo 至少一个。"
+    },
+    {
+      "source": "audit/overview.md",
+      "text": "- 确认 baseline/demo 是否能在本地、Docker、云服务器或 GPU 环境上跑通。"
+    },
+    {
+      "source": "candidates.json",
+      "text": "\"改写 reward_function 适配中文数学题，跑通最小 smoke test（1.5B 模型 + LoRA）\","
+    },
+    {
+      "source": "jd.txt",
+      "text": "- 熟悉推理与部署优化：vLLM/TensorRT-LLM、量化、KV Cache 优化"
+    },
+    {
+      "source": "ranking/candidate_score.json",
+      "text": "\"改写 reward_function 适配中文数学题，跑通最小 smoke test（1.5B 模型 + LoRA）\","
+    }
+  ]
+}
