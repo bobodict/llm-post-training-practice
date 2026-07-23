@@ -23,7 +23,9 @@ The implementation is intentionally independent of a model or GPU so that the al
 prompt -> rollout -> reward -> group advantage -> policy loss -> checkpoint
 ```
 
-The current project stops at group advantage. It does not claim a complete multi-GPU GRPO reproduction. A full follow-up should add a reward function, rollout sampling, KL regularization, policy loss, experiment logging, and a small cloud-GPU smoke test.
+In addition to the CPU-tested core, `scripts/grpo_smoke.py` runs a small single-GPU experiment with a real Qwen rollout, an exact-final-number reward, group-relative advantages, a PPO-style clipped objective, LoRA optimization, metric logging, and checkpoint saving. It is deliberately a smoke experiment: it does not claim a complete multi-GPU GRPO reproduction, KL-regularized production trainer, or benchmark result.
+
+The latest run is recorded in `artifacts/metrics/grpo_smoke.json`. Three groups had zero reward variance and therefore correctly produced zero advantage. The fourth group had rewards `[0, 0, 0, 1]`, producing non-zero advantages and one policy update with loss `0.0048`.
 
 ## 4. Questions to discuss
 

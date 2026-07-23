@@ -1,6 +1,6 @@
 # Chinese Domain LLM Post-Training Practice
 
-一个面向中文短文本任务的大模型后训练实验仓库。项目使用 Qwen2.5-1.5B 和 LoRA，在有限显存环境下研究 SFT、DPO、确定性评测以及 GRPO 优势估计的核心实现。
+一个面向中文短文本任务的大模型后训练实验仓库。项目使用 Qwen2.5-1.5B 和 LoRA，在有限显存环境下研究 SFT、DPO、确定性评测以及单卡 GRPO rollout smoke experiment。
 
 ## 研究问题
 
@@ -16,17 +16,17 @@ Base model -> General SFT -> Domain SFT -> Domain DPO
 - **中文领域数据**：包含情感判断、主题分类、摘要和短文本生成等任务，数据文件位于 `data/`。
 - **DPO**：手写 response-only log-prob、reference-adjusted margin 和 DPO loss，记录训练集/验证集 preference accuracy。
 - **评测**：固定随机种子，使用 greedy decoding，输出任务准确率、混淆矩阵和 JSON 结果。
-- **GRPO 核心**：实现可单元测试的组内 reward 标准化，不宣称完成大规模分布式 RL 训练。
+- **GRPO smoke experiment**：真实语言模型 rollout、可验证 arithmetic reward、组内 advantage、PPO-style clipped objective、LoRA 更新和 checkpoint 保存；不宣称完成大规模分布式 RL 训练。
 - **部署**：提供 FastAPI + OpenAI 风格接口的 LoRA 推理服务。
 
 ## 项目状态
 
 | 模块 | 状态 |
 | --- | --- |
-| 通用中文数据 SFT | 代码完成，需本地模型权重后运行 |
-| 中文领域 SFT | 代码完成，需本地模型权重后运行 |
-| DPO | 最小可运行实现，需先完成通用 SFT |
-| GRPO | advantage 核心实现与 CPU 单元测试完成 |
+| 通用中文数据 SFT | 已运行并保存 `general_sft` adapter |
+| 中文领域 SFT | 已从 `general_sft` 继续训练并保存 `domain_sft` adapter |
+| DPO | 已从 `domain_sft` policy/reference 运行并保存 `domain_dpo` adapter |
+| GRPO | 已完成单卡真实 rollout smoke；组内 reward 方差与零方差行为均有记录 |
 | 7B 以上模型、多卡 RL | 未包含 |
 
 仓库不提交模型权重和训练产物。实际训练后，checkpoint 写入 `artifacts/checkpoints/`，指标写入 `artifacts/metrics/`，评测结果写入 `artifacts/evaluation/`。
@@ -47,8 +47,10 @@ scripts/
 ├── train_windows.py           # 通用中文 SFT
 ├── train_domain.py            # 领域 SFT
 ├── train_dpo.py               # 手写 DPO
+├── ablation.py                # Domain SFT 超参数消融
 ├── dpo_core.py                # DPO 数学核心
 ├── grpo_core.py               # GRPO advantage 核心
+├── grpo_smoke.py               # 单卡真实 rollout smoke
 ├── eval_models.py             # 确定性评测
 └── api_server.py              # FastAPI 推理服务
 tests/
@@ -76,10 +78,11 @@ python -m scripts.train_windows
 python -m scripts.train_domain
 python -m scripts.train_dpo
 python -m scripts.eval_models
+python -m scripts.grpo_smoke
 python -m scripts.api_server
 ```
 
-默认配置面向单卡 8GB 显存。若要用于更严谨的研究结论，应继续扩充数据、增加独立测试集，并报告多次运行的均值和方差。
+默认配置面向单卡 8GB 显存。当前 GRPO 是 4 个 prompt、每个 prompt 采样 4 个 response 的 smoke experiment，主要验证 rollout 到参数更新的链路；若要用于更严谨的研究结论，应继续扩充数据、增加独立测试集，并报告多次运行的均值和方差。
 
 ## 技术栈
 

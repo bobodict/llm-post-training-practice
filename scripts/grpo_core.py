@@ -32,3 +32,11 @@ def compute_group_advantages(token_level_rewards, response_mask, group_ids, eps=
         advantages[indices] = normalized
 
     return advantages.unsqueeze(-1) * mask
+
+
+def clipped_grpo_loss(log_probs, old_log_probs, advantages, clip_eps=0.2):
+    """Compute the PPO-style clipped objective used by a minimal GRPO update."""
+    ratio = torch.exp(log_probs - old_log_probs.detach())
+    clipped_ratio = torch.clamp(ratio, 1.0 - clip_eps, 1.0 + clip_eps)
+    surrogate = torch.minimum(ratio * advantages, clipped_ratio * advantages)
+    return -surrogate.mean()

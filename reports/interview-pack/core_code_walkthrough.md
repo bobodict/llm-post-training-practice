@@ -8,6 +8,7 @@ python -m scripts.train_windows
 python -m scripts.train_domain
 python -m scripts.train_dpo
 python -m scripts.eval_models
+python -m scripts.grpo_smoke
 ```
 
 ## 2. SFT training loop
@@ -32,7 +33,7 @@ loss = -log sigmoid(beta * margin)
 
 `scripts/grpo_core.py` 将同一 prompt 生成的多个回答归为一组，先把 token-level reward 汇总为 response score，再在组内做均值和标准差归一化。组内 reward 方差接近零时返回零 advantage，避免数值不稳定；response mask 会清除 padding 位置。
 
-当前实现是可测试的算法核心，不等于包含 rollout、vLLM、分布式 worker 的完整 GRPO 训练系统。
+`scripts/grpo_smoke.py` 进一步把该核心接到真实 Qwen rollout：同一 prompt 采样 4 个回答，计算最终数字 reward，执行 clipped policy update 并保存 LoRA checkpoint。它是单卡 smoke experiment，不等于包含 vLLM、分布式 worker、KL 约束和大规模评测的完整 GRPO 训练系统。
 
 ## 5. Evaluation
 

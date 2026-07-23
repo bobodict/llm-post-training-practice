@@ -1,0 +1,61 @@
+{
+  "ablation_3ep_lr1e-4": {
+    "train": [
+      2.8637380067338336,
+      1.9129245014900857,
+      1.5894005209841626
+    ],
+    "validation": [
+      2.26946093638738,
+      1.8387098560730617,
+      1.6284788250923157
+    ],
+    "seed": 42,
+    "train_size": 47,
+    "validation_size": 12,
+    "initial_adapter": "D:\\llm-post-training-practice\\artifacts\\checkpoints\\general_sft",
+    "elapsed_seconds": 33.79
+  },
+  "ablation_5ep_lr1e-4": {
+    "train": [
+      2.8637380067338336,
+      1.9129245014900857,
+      1.5894005209841626,
+      1.346661704651853,
+      1.153673363492844
+    ],
+    "validation": [
+      2.26946093638738,
+      1.8387098560730617,
+      1.6284788250923157,
+      1.5063542574644089,
+      1.4595815539360046
+    ],
+    "seed": 42,
+    "train_size": 47,
+    "validation_size": 12,
+    "initial_adapter": "D:\\llm-post-training-practice\\artifacts\\checkpoints\\general_sft",
+    "elapsed_seconds": 55.64
+  },
+  "ablation_5ep_lr5e-5": {
+    "train": [
+      3.0727612464985947,
+      2.3357461969903173,
+      1.8621571419086862,
+      1.6375045319820971,
+      1.462875169642428
+    ],
+    "validation": [
+      2.785711318254471,
+      2.151014983654022,
+      1.8100215742985408,
+      1.687659074862798,
+      1.547777995467186
+    ],
+    "seed": 42,
+    "train_size": 47,
+    "validation_size": 12,
+    "initial_adapter": "D:\\llm-post-training-practice\\artifacts\\checkpoints\\general_sft",
+    "elapsed_seconds": 55.38
+  }
+}

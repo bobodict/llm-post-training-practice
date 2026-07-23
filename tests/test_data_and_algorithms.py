@@ -10,8 +10,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.config import mask_padding_labels, split_records
 from scripts.dpo_core import dpo_loss, preference_accuracy
 from scripts.eval_models import extract_label
-from scripts.grpo_core import compute_group_advantages
+from scripts.grpo_core import clipped_grpo_loss, compute_group_advantages
+from scripts.grpo_smoke import reward_response
 from scripts.api_server import ADAPTER_PATH
+from scripts.train_domain import INITIAL_ADAPTER_PATH
+from scripts.train_dpo import POLICY_PATH, REFERENCE_PATH
+from scripts.ablation import ABLATION_CONFIGS, select_best_validation
 
 
 class DataUtilityTests(unittest.TestCase):
@@ -90,6 +94,20 @@ class GrpoTests(unittest.TestCase):
 
         self.assertEqual(advantages[:, 1].tolist(), [0.0, 0.0])
 
+    def test_clipped_grpo_loss_prefers_positive_advantage_updates(self):
+        loss = clipped_grpo_loss(
+            torch.tensor([1.0, 1.5]),
+            torch.tensor([1.0, 1.0]),
+            torch.tensor([1.0, 1.0]),
+            clip_eps=0.2,
+        )
+        self.assertLess(loss.item(), 0.0)
+
+    def test_reward_function_requires_the_expected_answer(self):
+        self.assertEqual(reward_response("答案：4", "4"), 1.0)
+        self.assertEqual(reward_response("答案：5", "4"), 0.0)
+        self.assertEqual(reward_response("答案：14", "4"), 0.0)
+
 
 class EvaluationTests(unittest.TestCase):
     def test_extract_label_matches_only_the_declared_label_set(self):
@@ -98,6 +116,20 @@ class EvaluationTests(unittest.TestCase):
 
     def test_api_serves_the_final_dpo_adapter(self):
         self.assertEqual(ADAPTER_PATH.name, "domain_dpo")
+
+    def test_training_stages_form_a_serial_pipeline(self):
+        self.assertEqual(INITIAL_ADAPTER_PATH.name, "general_sft")
+        self.assertEqual(POLICY_PATH.name, "domain_sft")
+        self.assertEqual(REFERENCE_PATH.name, "domain_sft")
+
+    def test_ablation_configs_have_unique_names_and_select_best_validation(self):
+        names = [config["name"] for config in ABLATION_CONFIGS]
+        self.assertEqual(len(names), len(set(names)))
+        best = select_best_validation({
+            "short": {"validation": [3.0, 2.0]},
+            "long": {"validation": [3.0, 1.5]},
+        })
+        self.assertEqual(best, "long")
 
 
 if __name__ == "__main__":

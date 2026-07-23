@@ -4,21 +4,23 @@ from __future__ import annotations
 
 import gc
 import math
+import os
 import time
 
 import torch
-from peft import LoraConfig, get_peft_model
+from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from .config import ARTIFACTS_DIR, DATA_DIR, MODEL_PATH, load_json, mask_padding_labels, save_json, set_seed, split_records
 
 
-OUTPUT_DIR = ARTIFACTS_DIR / "checkpoints" / "domain_sft"
+RUN_NAME = os.getenv("RUN_NAME", "domain_sft")
+OUTPUT_DIR = ARTIFACTS_DIR / "checkpoints" / RUN_NAME
+INITIAL_ADAPTER_PATH = ARTIFACTS_DIR / "checkpoints" / "general_sft"
 CUTOFF_LEN = 256
 GRAD_ACCUM = 4
-LEARNING_RATE = 1e-4
-NUM_EPOCHS = 5
-LORA_R = 16
+LEARNING_RATE = float(os.getenv("DOMAIN_LR", "1e-4"))
+NUM_EPOCHS = int(os.getenv("DOMAIN_EPOCHS", "5"))
 
 
 def format_domain_example(item):
@@ -62,13 +64,17 @@ def main():
     model_kwargs = {"trust_remote_code": True, "torch_dtype": dtype}
     if device.type == "cuda":
         model_kwargs["device_map"] = "cuda"
-    model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, **model_kwargs)
+    if not INITIAL_ADAPTER_PATH.exists():
+        raise FileNotFoundError(
+            f"General SFT checkpoint is required before domain SFT: {INITIAL_ADAPTER_PATH}"
+        )
+    base_model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, **model_kwargs)
     if device.type != "cuda":
-        model.to(device)
-    model = get_peft_model(model, LoraConfig(
-        r=LORA_R, lora_alpha=LORA_R * 2,
-        target_modules="all-linear", lora_dropout=0.05,
-    ))
+        base_model.to(device)
+    model = PeftModel.from_pretrained(base_model, INITIAL_ADAPTER_PATH, is_trainable=True)
+    for name, parameter in model.named_parameters():
+        if "lora" in name.lower():
+            parameter.requires_grad = True
     model.print_trainable_parameters()
     model.train()
 
@@ -76,7 +82,11 @@ def main():
         (parameter for parameter in model.parameters() if parameter.requires_grad),
         lr=LEARNING_RATE,
     )
-    metrics = {"train": [], "validation": [], "seed": 42, "train_size": len(train_records), "validation_size": len(validation_records)}
+    metrics = {
+        "train": [], "validation": [], "seed": 42,
+        "train_size": len(train_records), "validation_size": len(validation_records),
+        "initial_adapter": str(INITIAL_ADAPTER_PATH),
+    }
     t0 = time.time()
 
     for epoch in range(NUM_EPOCHS):
@@ -111,7 +121,7 @@ def main():
     model.save_pretrained(OUTPUT_DIR)
     tokenizer.save_pretrained(OUTPUT_DIR)
     metrics["elapsed_seconds"] = round(time.time() - t0, 2)
-    save_json(metrics, ARTIFACTS_DIR / "metrics" / "domain_sft.json")
+    save_json(metrics, ARTIFACTS_DIR / "metrics" / f"{RUN_NAME}.json")
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()

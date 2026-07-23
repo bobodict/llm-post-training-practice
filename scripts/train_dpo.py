@@ -13,7 +13,8 @@ from .config import ARTIFACTS_DIR, DATA_DIR, MODEL_PATH, load_json, save_json, s
 from .dpo_core import dpo_loss, preference_accuracy
 
 
-SFT_PATH = ARTIFACTS_DIR / "checkpoints" / "general_sft"
+POLICY_PATH = ARTIFACTS_DIR / "checkpoints" / "domain_sft"
+REFERENCE_PATH = ARTIFACTS_DIR / "checkpoints" / "domain_sft"
 OUTPUT_DIR = ARTIFACTS_DIR / "checkpoints" / "domain_dpo"
 BETA = 0.1
 LEARNING_RATE = 5e-6
@@ -123,9 +124,12 @@ def main():
     records = load_json(DATA_DIR / "dpo_domain_demo.json")
     train_records, validation_records = split_records(records, seed=42)
 
-    print("[1/4] Loading SFT reference model...")
+    if not POLICY_PATH.exists():
+        raise FileNotFoundError(f"Domain SFT checkpoint is required before DPO: {POLICY_PATH}")
+
+    print("[1/4] Loading Domain SFT reference model...")
     reference_base = load_base_model(device)
-    reference_model = PeftModel.from_pretrained(reference_base, SFT_PATH)
+    reference_model = PeftModel.from_pretrained(reference_base, REFERENCE_PATH)
     reference_model.eval()
     train_reference = compute_reference_scores(reference_model, tokenizer, train_records, device)
     validation_reference = compute_reference_scores(reference_model, tokenizer, validation_records, device)
@@ -134,9 +138,9 @@ def main():
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-    print("[2/4] Loading trainable SFT policy...")
+    print("[2/4] Loading trainable Domain SFT policy...")
     policy_base = load_base_model(device)
-    policy = PeftModel.from_pretrained(policy_base, SFT_PATH, is_trainable=True)
+    policy = PeftModel.from_pretrained(policy_base, POLICY_PATH, is_trainable=True)
     for name, parameter in policy.named_parameters():
         if "lora" in name.lower():
             parameter.requires_grad = True
@@ -145,7 +149,10 @@ def main():
         lr=LEARNING_RATE,
     )
 
-    metrics = {"train": [], "validation": [], "beta": BETA, "epochs": NUM_EPOCHS}
+    metrics = {
+        "train": [], "validation": [], "beta": BETA, "epochs": NUM_EPOCHS,
+        "policy_adapter": str(POLICY_PATH), "reference_adapter": str(REFERENCE_PATH),
+    }
     t0 = time.time()
     for epoch in range(NUM_EPOCHS):
         train_metrics = train_on_records(policy, tokenizer, train_records, train_reference, optimizer, device)
