@@ -1,58 +1,58 @@
-# 环境配置指南
+# Environment and Reproduction Guide
 
-## 硬件要求
-- NVIDIA GPU，≥8GB VRAM（RTX 3060/4060 即可）
-- 推荐 16GB+ 内存
+## Requirements
 
-## 1. 安装依赖
+- Python 3.11
+- NVIDIA GPU with at least 8GB VRAM for the default experiment
+- PyTorch with a CUDA build for GPU training
+- Qwen2.5-1.5B-Instruct model weights stored outside this repository
 
-```bash
-# PyTorch + CUDA
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
-
-# LLaMA-Factory（核心框架）
-git clone https://github.com/hiyouga/LLaMA-Factory.git
-cd LLaMA-Factory
-pip install -e ".[torch,metrics]"
-
-# 本项目脚本依赖
-pip install peft transformers datasets fastapi uvicorn
-```
-
-## 2. 下载模型
+Install dependencies:
 
 ```bash
-# 从 ModelScope 下载（国内快）
-cd LLaMA-Factory
-python -c "from modelscope import snapshot_download; snapshot_download('Qwen/Qwen2.5-1.5B-Instruct', cache_dir='./models')"
+python -m pip install -r requirements.txt
 ```
 
-## 3. 运行脚本
+On Windows, install the PyTorch build matching the local CUDA driver from the official PyTorch index before installing the remaining packages.
+
+## Model path
+
+The scripts read `MODEL_PATH`. Set it to the local model directory:
+
+```powershell
+$env:MODEL_PATH = "D:\models\Qwen2.5-1.5B-Instruct"
+```
+
+If the variable is not set, the default is `models/Qwen/Qwen2___5-1___5B-Instruct` under the repository root.
+
+## Reproduction order
+
+Run from the repository root:
 
 ```bash
-# 将本项目 scripts/ 下的 .py 和 .json 文件复制到 LLaMA-Factory 目录
-cp scripts/*.py scripts/*.json LLaMA-Factory/
-
-# 基线 SFT 训练（500 样本, 3 epoch, ~7.5 分钟）
-cd LLaMA-Factory
-python train_windows.py
-
-# B站领域数据 SFT
-python train_bilibili.py
-
-# DPO 偏好对齐
-python train_dpo.py
-
-# 4 模型对比评测
-python eval_models.py
-
-# API 推理服务（启动后访问 http://localhost:8000）
-python api_server.py
+python -m unittest discover -s tests -v
+python -m scripts.train_windows
+python -m scripts.train_domain
+python -m scripts.train_dpo
+python -m scripts.eval_models
 ```
 
-## 4. GRPO 代码精读（可选）
+The DPO experiment uses the general SFT checkpoint as both the initialization and the reference policy. The evaluation script skips adapters that have not been trained yet and writes a structured result file instead of claiming unavailable numbers.
+
+## Inference service
+
+After Domain DPO completes:
 
 ```bash
-git clone https://github.com/hiyouga/EasyR1.git
-# 核心文件: verl/trainer/core_algos.py (compute_grpo_outcome_advantage)
+python -m scripts.api_server
 ```
+
+The service exposes `/health` and `/v1/chat/completions`. It is a local demonstration service and does not include authentication, batching, streaming, rate limiting, or production observability.
+
+## Reproducibility notes
+
+- The default seed is `42`; override it with `SEED`.
+- Training and validation splits are deterministic.
+- Classification evaluation uses greedy decoding.
+- Model checkpoints, logs, and metrics are intentionally excluded from Git.
+- The checked-in data is a small demonstration corpus, not a benchmark or a statistically representative production dataset.

@@ -1,4 +1,4 @@
-"""Baseline LoRA SFT on the checked-in general Chinese instruction data."""
+"""LoRA SFT for the checked-in Chinese short-text domain dataset."""
 
 from __future__ import annotations
 
@@ -13,21 +13,18 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from .config import ARTIFACTS_DIR, DATA_DIR, MODEL_PATH, load_json, mask_padding_labels, save_json, set_seed, split_records
 
 
-OUTPUT_DIR = ARTIFACTS_DIR / "checkpoints" / "general_sft"
-CUTOFF_LEN = 512
+OUTPUT_DIR = ARTIFACTS_DIR / "checkpoints" / "domain_sft"
+CUTOFF_LEN = 256
 GRAD_ACCUM = 4
 LEARNING_RATE = 1e-4
-NUM_EPOCHS = 3
-LORA_R = 8
+NUM_EPOCHS = 5
+LORA_R = 16
 
 
-def format_example(item):
-    instruction = item.get("instruction", "")
-    extra_input = item.get("input", "")
-    output = item.get("output", "")
+def format_domain_example(item):
     return (
-        f"<|im_start|>user\n{instruction}\n{extra_input}<|im_end|>\n"
-        f"<|im_start|>assistant\n{output}<|im_end|>"
+        f"<|im_start|>user\n{item['instruction']}\n{item.get('input', '')}<|im_end|>\n"
+        f"<|im_start|>assistant\n{item['output']}<|im_end|>"
     )
 
 
@@ -47,7 +44,7 @@ def evaluate_loss(model, tokenizer, records, device):
     model.eval()
     losses = []
     for item in records:
-        input_ids, attention_mask, labels = encode_example(tokenizer, format_example(item), device)
+        input_ids, attention_mask, labels = encode_example(tokenizer, format_domain_example(item), device)
         losses.append(model(input_ids=input_ids, attention_mask=attention_mask, labels=labels).loss.item())
     model.train()
     return sum(losses) / max(1, len(losses))
@@ -57,12 +54,11 @@ def main():
     set_seed()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     dtype = torch.float16 if device.type == "cuda" else torch.float32
-    raw = load_json(DATA_DIR / "general_zh_demo.json")
+    raw = load_json(DATA_DIR / "domain_zh.json")
     train_records, validation_records = split_records(raw, seed=42)
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.pad_token = tokenizer.eos_token
     model_kwargs = {"trust_remote_code": True, "torch_dtype": dtype}
     if device.type == "cuda":
         model_kwargs["device_map"] = "cuda"
@@ -80,7 +76,6 @@ def main():
         (parameter for parameter in model.parameters() if parameter.requires_grad),
         lr=LEARNING_RATE,
     )
-    steps_per_epoch = math.ceil(len(train_records) / GRAD_ACCUM)
     metrics = {"train": [], "validation": [], "seed": 42, "train_size": len(train_records), "validation_size": len(validation_records)}
     t0 = time.time()
 
@@ -89,7 +84,7 @@ def main():
         running_loss = 0.0
         accumulated = 0
         for index, item in enumerate(train_records):
-            input_ids, attention_mask, labels = encode_example(tokenizer, format_example(item), device)
+            input_ids, attention_mask, labels = encode_example(tokenizer, format_domain_example(item), device)
             loss = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels).loss
             (loss / GRAD_ACCUM).backward()
             running_loss += loss.item()
@@ -116,7 +111,7 @@ def main():
     model.save_pretrained(OUTPUT_DIR)
     tokenizer.save_pretrained(OUTPUT_DIR)
     metrics["elapsed_seconds"] = round(time.time() - t0, 2)
-    save_json(metrics, ARTIFACTS_DIR / "metrics" / "general_sft.json")
+    save_json(metrics, ARTIFACTS_DIR / "metrics" / "domain_sft.json")
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()

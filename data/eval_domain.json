@@ -1,0 +1,14 @@
+[
+  {"task": "sentiment", "instruction": "判断下列句子的情感（正面/负面/中性）", "input": "这次实验结果比预期好很多。", "label": "正面", "labels": ["正面", "负面", "中性"]},
+  {"task": "sentiment", "instruction": "判断下列句子的情感（正面/负面/中性）", "input": "训练过程频繁崩溃，结果无法复现。", "label": "负面", "labels": ["正面", "负面", "中性"]},
+  {"task": "sentiment", "instruction": "判断下列句子的情感（正面/负面/中性）", "input": "模型在周一下午完成训练。", "label": "中性", "labels": ["正面", "负面", "中性"]},
+  {"task": "sentiment", "instruction": "判断下列句子的情感（正面/负面/中性）", "input": "这个解释清楚又有帮助。", "label": "正面", "labels": ["正面", "负面", "中性"]},
+  {"task": "sentiment", "instruction": "判断下列句子的情感（正面/负面/中性）", "input": "数据质量太差，结论没有说服力。", "label": "负面", "labels": ["正面", "负面", "中性"]},
+  {"task": "sentiment", "instruction": "判断下列句子的情感（正面/负面/中性）", "input": "验证集一共有两百条样本。", "label": "中性", "labels": ["正面", "负面", "中性"]},
+  {"task": "topic", "instruction": "判断这个视频属于哪个分区", "input": "视频标题：Python 数据结构入门教程。", "label": "科技区-编程", "labels": ["科技区-编程", "知识区-教育", "生活区-美食"]},
+  {"task": "topic", "instruction": "判断这个视频属于哪个分区", "input": "视频标题：Transformer 自注意力机制原理。", "label": "科技区-编程", "labels": ["科技区-编程", "知识区-教育", "生活区-美食"]},
+  {"task": "topic", "instruction": "判断这个视频属于哪个分区", "input": "视频标题：从零开始学线性回归。", "label": "知识区-教育", "labels": ["科技区-编程", "知识区-教育", "生活区-美食"]},
+  {"task": "topic", "instruction": "判断这个视频属于哪个分区", "input": "视频标题：导数大题的解题方法。", "label": "知识区-教育", "labels": ["科技区-编程", "知识区-教育", "生活区-美食"]},
+  {"task": "topic", "instruction": "判断这个视频属于哪个分区", "input": "视频标题：一百元吃遍城市夜市。", "label": "生活区-美食", "labels": ["科技区-编程", "知识区-教育", "生活区-美食"]},
+  {"task": "topic", "instruction": "判断这个视频属于哪个分区", "input": "视频标题：家庭晚餐的营养搭配。", "label": "生活区-美食", "labels": ["科技区-编程", "知识区-教育", "生活区-美食"]}
+]

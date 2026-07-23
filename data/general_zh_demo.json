@@ -1,0 +1,10 @@
+[
+  {"instruction": "解释什么是监督学习", "input": "", "output": "监督学习使用带标签的数据训练模型，让模型学习输入与目标输出之间的映射关系。"},
+  {"instruction": "解释什么是过拟合", "input": "", "output": "过拟合是模型过度记忆训练数据，在训练集表现很好，但在未见过的数据上泛化能力较差。"},
+  {"instruction": "给出三个改善代码可读性的建议", "input": "", "output": "使用清晰的命名、拆分过长函数、为复杂逻辑补充必要的注释和测试。"},
+  {"instruction": "将下面内容概括为一句话", "input": "Transformer通过自注意力机制建模序列中不同位置之间的关系。", "output": "Transformer利用自注意力机制建模序列内部的依赖关系。"},
+  {"instruction": "判断下列句子的情感", "input": "这个方案很清晰，实验结果也令人满意。", "output": "正面"},
+  {"instruction": "判断下列句子的情感", "input": "结果不稳定，问题还没有解决。", "output": "负面"},
+  {"instruction": "判断下列句子的情感", "input": "实验在下午两点开始。", "output": "中性"},
+  {"instruction": "写一个Python函数计算列表平均值", "input": "", "output": "def mean(values):\n    if not values:\n        raise ValueError('values must not be empty')\n    return sum(values) / len(values)"}
+]
