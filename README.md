@@ -35,6 +35,8 @@ Base model -> General SFT -> Domain SFT -> Domain DPO
 
 当前环境已实际跑通 General SFT、Domain SFT、Domain DPO 和四模型评测。训练指标与限制分析见 [reports/experiment_results.md](reports/experiment_results.md)。本次 12 条闭集评测中，四个模型情感判断均为 `6/6`，主题分类均为 `4/6`；该结果没有显示后训练带来可观测提升。
 
+面试准备详解见 [reports/interview-pack/project_deep_dive.md](reports/interview-pack/project_deep_dive.md)，包括数据、训练目标、代码链路、实验结果、限制和高频追问。
+
 ## 目录结构
 
 ```text
